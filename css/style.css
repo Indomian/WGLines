@@ -1,0 +1,12 @@
+#gameTable {
+    border-collapse: collapse;
+}
+
+#gameTable td {
+    padding: 0;
+    margin: 0;
+}
+
+#gameTable td div {
+    border: 1px solid black;
+}

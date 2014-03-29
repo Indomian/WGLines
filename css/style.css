@@ -1,3 +1,8 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
 #gameTable {
     border-collapse: collapse;
 }
@@ -7,6 +12,82 @@
     margin: 0;
 }
 
-#gameTable td div {
+#gameTable td div.cell {
     border: 1px solid black;
+    width:50px;
+    height:50px;
+    background: gray;
+}
+
+#gameTable td div.cell-content {
+    border-radius: 50%;
+    border:1px solid black;
+    height:100%;
+    margin: auto;
+}
+
+#gameTable td div.cell-content.red {
+    background: red;
+}
+#gameTable td div.cell-content.green {
+    background: green;
+}
+#gameTable td div.cell-content.blue {
+    background: blue;
+}
+#gameTable td div.cell-content.yellow {
+    background: yellow;
+}
+#gameTable td div.cell-content.white {
+    background: white;
+}
+#gameTable td div.cell-content.purple {
+    background: purple;
+}
+#gameTable td div.cell-content.black {
+    background: black;
+}
+
+#gameTable td div.cell-content.future-red {
+    background: red;
+    height: 50%;
+    width: 50%;
+}
+#gameTable td div.cell-content.future-green {
+    background: green;
+    height: 50%;
+    width: 50%;
+}
+#gameTable td div.cell-content.future-blue {
+    background: blue;
+    height: 50%;
+    width: 50%;
+}
+#gameTable td div.cell-content.future-yellow {
+    background: yellow;
+    height: 50%;
+    width: 50%;
+}
+#gameTable td div.cell-content.future-white {
+    background: white;
+    height: 50%;
+    width: 50%;
+}
+#gameTable td div.cell-content.future-purple {
+    background: purple;
+    height: 50%;
+    width: 50%;
+}
+#gameTable td div.cell-content.future-black {
+    background: black;
+    height: 50%;
+    width: 50%;
+}
+
+#gameTable td.pathItem {
+    border:1px solid red;
+}
+
+#gameTable td.selected div {
+    border: 3px solid red;
 }

@@ -3,7 +3,7 @@ require_once ROOT_DIR.'/inc/cell.php';
 /**
  * Class used to store field data
  */
-class Field {
+class Field implements Serializable {
 	const CELL_EMPTY=0;
 
 	private $_size;
@@ -26,6 +26,12 @@ class Field {
 		}
 	}
 
+	/**
+	 * @param $x
+	 * @param $y
+	 * @return Cell
+	 * @throws OutOfBoundsException
+	 */
 	public function getCell($x,$y) {
 		if($x>=0 && $x<$this->_size &&
 			$y>=0 && $y<$this->_size) {
@@ -36,5 +42,33 @@ class Field {
 
 	private function createCell() {
 		return new Cell($this);
+	}
+
+	public function serialize() {
+		$arResult=array(
+			'size'=>$this->_size,
+			'cells'=>array()
+		);
+		for($i=0;$i<$this->_size;$i++) {
+			for($j=0;$j<$this->_size;$j++) {
+				$arResult['cells'][]=serialize($this->getCell($i,$j));
+			}
+		}
+		return json_encode($arResult);
+	}
+
+	public function unserialize($value) {
+		$arInput=json_decode($value,true);
+		if(!isset($arInput['size']))
+			throw new Exception('Wrong input data');
+		$this->_size=$arInput['size'];
+		$this->_arField=array();
+		for($i=0;$i<$this->_size;$i++) {
+			for($j=0;$j<$this->_size;$j++) {
+				$newCell=unserialize($arInput['cells'][$j*$this->_size+$i]);
+				$newCell->setField($this);
+				$this->_arField[$i][$j]=$newCell;
+			}
+		}
 	}
 }

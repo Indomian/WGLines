@@ -5,14 +5,14 @@
 class View {
 	public $templateSourcePath='/templates/';
 	private $arColors=array(
-		0=>'#aaa',
-		1=>'#f00',
-		2=>'#0f0',
-		3=>'#00f',
-		4=>'#ff0',
-		5=>'#fff',
-		6=>'#f0f',
-		7=>'#000',
+		0=>'empty-cell',
+		1=>'red',
+		2=>'green',
+		3=>'blue',
+		4=>'yellow',
+		5=>'white',
+		6=>'purple',
+		7=>'black',
 	);
 
 	public function __construct($templatePath=null) {

@@ -13,79 +13,68 @@ body {
 }
 
 #gameTable td div.cell {
-    border: 1px solid black;
+    border-right: 3px solid black;
+    border-bottom: 3px solid black;
+    border-top: 3px solid lightgrey;
+    border-left: 3px solid lightgrey;
     width:50px;
     height:50px;
+    padding: 1px;
     background: gray;
 }
 
-#gameTable td div.cell-content {
+div.cell-content {
     border-radius: 50%;
-    border:1px solid black;
-    height:100%;
-    margin: auto;
+    width:42px;
+    height:42px;
 }
 
-#gameTable td div.cell-content.red {
+div.cell-content.future-red ,
+div.cell-content.future-green,
+div.cell-content.future-blue,
+div.cell-content.future-yellow,
+div.cell-content.future-white,
+div.cell-content.future-purple,
+div.cell-content.future-black {
+    width:24px;
+    height:24px;
+    margin:9px;
+}
+
+div.cell-content.red,
+div.cell-content.future-red {
     background: red;
+    border:3px solid darkred;
 }
-#gameTable td div.cell-content.green {
+div.cell-content.green,
+div.cell-content.future-green {
     background: green;
+    border:3px solid darkgreen;
 }
-#gameTable td div.cell-content.blue {
+div.cell-content.blue,
+div.cell-content.future-blue {
     background: blue;
+    border: 3px solid darkblue;
 }
-#gameTable td div.cell-content.yellow {
+div.cell-content.yellow,
+div.cell-content.future-yellow {
     background: yellow;
+    border: 3px solid orange;
 }
-#gameTable td div.cell-content.white {
+div.cell-content.white,
+div.cell-content.future-white {
     background: white;
+    border: 3px solid darkgray;
 }
-#gameTable td div.cell-content.purple {
+div.cell-content.purple,
+div.cell-content.future-purple {
     background: purple;
+    border: 3px solid darkmagenta;
 }
-#gameTable td div.cell-content.black {
+div.cell-content.black,
+div.cell-content.future-black {
     background: black;
-}
-
-#gameTable td div.cell-content.future-red {
-    background: red;
-    height: 50%;
-    width: 50%;
-}
-#gameTable td div.cell-content.future-green {
-    background: green;
-    height: 50%;
-    width: 50%;
-}
-#gameTable td div.cell-content.future-blue {
-    background: blue;
-    height: 50%;
-    width: 50%;
-}
-#gameTable td div.cell-content.future-yellow {
-    background: yellow;
-    height: 50%;
-    width: 50%;
-}
-#gameTable td div.cell-content.future-white {
-    background: white;
-    height: 50%;
-    width: 50%;
-}
-#gameTable td div.cell-content.future-purple {
-    background: purple;
-    height: 50%;
-    width: 50%;
-}
-#gameTable td div.cell-content.future-black {
-    background: black;
-    height: 50%;
-    width: 50%;
-}
-
-#gameTable td.pathItem {
-    border:1px solid red;
+    border:3px solid black;
 }
 
 #gameTable td.selected div {

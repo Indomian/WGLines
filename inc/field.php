@@ -3,7 +3,7 @@ require_once ROOT_DIR.'/inc/cell.php';
 /**
  * Class used to store field data
  */
-class Field implements Serializable {
+class Field implements Serializable, Iterator {
 	const CELL_EMPTY=0;
 
 	private $_size;
@@ -19,9 +19,9 @@ class Field implements Serializable {
 	}
 
 	public function initField() {
-		for($i=0;$i<$this->_size;$i++) {
-			for($j=0;$j<$this->_size;$j++) {
-				$this->_arField[$i][$j]=$this->createCell();
+		for($x=0;$x<$this->_size;$x++) {
+			for($y=0;$y<$this->_size;$y++) {
+				$this->_arField[$x][$y]=$this->createCell();
 			}
 		}
 	}
@@ -49,9 +49,9 @@ class Field implements Serializable {
 			'size'=>$this->_size,
 			'cells'=>array()
 		);
-		for($i=0;$i<$this->_size;$i++) {
-			for($j=0;$j<$this->_size;$j++) {
-				$arResult['cells'][]=serialize($this->getCell($i,$j));
+		for($y=0;$y<$this->_size;$y++) {
+			for($x=0;$x<$this->_size;$x++) {
+				$arResult['cells'][]=serialize($this->getCell($x,$y));
 			}
 		}
 		return json_encode($arResult);
@@ -63,12 +63,35 @@ class Field implements Serializable {
 			throw new Exception('Wrong input data');
 		$this->_size=$arInput['size'];
 		$this->_arField=array();
-		for($i=0;$i<$this->_size;$i++) {
-			for($j=0;$j<$this->_size;$j++) {
-				$newCell=unserialize($arInput['cells'][$j*$this->_size+$i]);
+		for($x=0;$x<$this->_size;$x++) {
+			for($y=0;$y<$this->_size;$y++) {
+				$newCell=unserialize($arInput['cells'][$y*$this->_size+$x]);
 				$newCell->setField($this);
-				$this->_arField[$i][$j]=$newCell;
+				$this->_arField[$x][$y]=$newCell;
 			}
 		}
+	}
+
+	private $colIndex;
+
+	/* Methods */
+	public function current () {
+		return $this->_arField[$this->colIndex];
+	}
+
+	public function key () {
+		return $this->colIndex;
+	}
+
+	public function next () {
+		$this->colIndex++;
+	}
+
+	public function rewind () {
+		$this->colIndex=0;
+	}
+
+	public function valid () {
+		return $this->colIndex<$this->_size;
 	}
 }

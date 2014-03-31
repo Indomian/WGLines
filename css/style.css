@@ -80,3 +80,15 @@ div.cell-content.future-black {
 #gameTable td.selected div {
     border: 3px solid red;
 }
+
+.list-group-item {
+    cursor: pointer;
+}
+
+.list-group-item:hover {
+    background: lightblue;
+}
+
+h2.page-header {
+    margin:10px 0;
+}

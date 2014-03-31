@@ -30,8 +30,16 @@ function LinesEngine(htmlObject) {
 	var callbacks={
 		'clearMoves':function() {
 			$('#steps').empty();
+		},
+		'resetSteps':function() {
+			var item=$('#steps li.active');
+			while(item.next().length>0) {
+				item.next().remove();
+			}
+			item.removeClass('active');
 		}
 	};
+	var locked=false;
 
 	var path=[];
 
@@ -130,6 +138,7 @@ function LinesEngine(htmlObject) {
 	function stepPath() {
 		if(path.length==0) {
 			animatedPoint.remove();
+			locked=false;
 			return;
 		}
 		var next=path.shift();
@@ -139,6 +148,7 @@ function LinesEngine(htmlObject) {
 		}
 		if(next.hasOwnProperty('x') && !moveCellVisual(prevPathPoint,next,stepPath)) {
 			animatedPoint.remove();
+			locked=false;
 			return;
 		}
 		prevPathPoint=next;
@@ -150,6 +160,27 @@ function LinesEngine(htmlObject) {
 				table.find('tr:eq('+y+')>td:eq('+x+')>div>div').attr('class',map[x][y].class);
 			}
 		}
+	}
+
+	function processResult(result) {
+		var index;
+		if(result.hasOwnProperty('callbacks')) {
+			for(var i=0;i<result.callbacks.length;i++) {
+				if(callbacks.hasOwnProperty(result.callbacks[i])) {
+					callbacks[result.callbacks[i]]();
+				}
+			}
+		}
+		if(result.hasOwnProperty('map')) {
+			updateMap(result.map);
+		}
+		if(result.hasOwnProperty('score')) {
+			$('#score').html(result.score);
+		}
+		if(result.hasOwnProperty('move') && result.hasOwnProperty('moveIndex')) {
+			$('#steps').append('<li class="list-group-item" data-index="'+result.moveIndex+'">'+result.move+'</li>');
+		}
+		locked=false;
 	}
 
 	function sendRequestAction(action,data,callback) {
@@ -164,29 +195,14 @@ function LinesEngine(htmlObject) {
 			if(result.hasOwnProperty('error')) {
 				alert(result.error);
 			} else {
-				if(result.hasOwnProperty('callbacks')) {
-					for(var i=0;result.callbacks.length;i++) {
-						if(callbacks.hasOwnProperty(result.callbacks[i])) {
-							callbacks[result.callbacks[i]]();
+				if(path.length>0) {
+					path.push({
+						'callback':function() {
+							processResult(result);
 						}
-					}
-				}
-				if(result.hasOwnProperty('map')) {
-					if(path.length>0) {
-						path.push({
-							'callback':function() {
-								updateMap(result.map);
-							}
-						});
-					} else {
-						updateMap(result.map);
-					}
-				}
-				if(result.hasOwnProperty('score')) {
-					$('#score').html(result.score);
-				}
-				if(result.hasOwnProperty('move')) {
-					$('#steps').append('<li class="list-group-item">'+result.move+'</li>');
+					});
+				} else {
+					processResult(result);
 				}
 				if(callback!=undefined) {
 					callback();
@@ -203,7 +219,8 @@ function LinesEngine(htmlObject) {
 		to.y=destinationCell.attr('data-y');
 		table.find('.pathItem').removeClass('pathItem');
 		if(findPath(from.x,from.y,to.x,to.y)) {
-			selectedCell.removeClass('selected');
+			locked=true;
+			table.find('.selected').removeClass('selected');
 			/**
 			 * Made animation point
 			 */
@@ -213,8 +230,8 @@ function LinesEngine(htmlObject) {
 				'position':'absolute',
 				'width':fromPoint.outerWidth(),
 				'height':fromPoint.outerHeight(),
-				'left':fromPoint.offset().left+4,
-				'top':fromPoint.offset().top+4
+				'left':fromPoint.offset().left,
+				'top':fromPoint.offset().top
 			});
 			$('body').append(animatedPoint);
 			fromPoint.attr('class','cell-content empty-cell future-empty-cell');
@@ -227,7 +244,21 @@ function LinesEngine(htmlObject) {
 
 	$('#newGame').click(function(e){
 		e.preventDefault();
+		if(locked) {
+			return;
+		}
+		table.find('.selected').removeClass('selected');
 		sendRequestAction('restart');
+	});
+
+	$('#steps').on('click','li',function(e){
+		e.preventDefault();
+		if(locked) {
+			return;
+		}
+		table.find('.selected').removeClass('selected');
+		$(this).addClass('active');
+		sendRequestAction('reset',$(this).attr('data-index'));
 	});
 
 	table.find('td').click(function(e){
